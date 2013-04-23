@@ -28,6 +28,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
 		Button makeCall = (Button)findViewById(R.id.make_call);
 		makeCall.setOnClickListener(makeCallLiter);
 		
@@ -43,6 +44,21 @@ public class MainActivity extends Activity {
 		
 		Button flashLight = (Button)findViewById(R.id.flash_light_btn);
 		flashLight.setOnClickListener(flashLightLister);
+		
+		Button next = (Button)findViewById(R.id.send_msn_view);
+        next.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+            	setContentView(R.layout.send_message_view);
+            	Button back = (Button)findViewById(R.id.go_back);
+            	back.setOnClickListener(gobackLister);
+            	
+            	Button sendMessage = (Button)findViewById(R.id.intent_send);
+            	sendMessage.setOnClickListener(sendMessageInent);
+            	
+            	
+            }
+
+        });
 		
 	}	
 	
@@ -60,7 +76,7 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) { 
-	    super.onActivityResult(requestCode, resultCode, imageReturnedIntent); 
+		super.onActivityResult(requestCode, resultCode, imageReturnedIntent); 
 
 	    switch(requestCode) { 
 	    case BROWSE_IMAGE_REQUEST_CODE:
@@ -145,6 +161,32 @@ public class MainActivity extends Activity {
 		}
 		
 	};
+	
+	private OnClickListener sendMessageInent = new OnClickListener(){
+
+		@Override
+		public void onClick(View arg0) {
+			EditText txtSent;
+			txtSent = (EditText)findViewById(R.id.text_tobe_send);
+			String txtToBesend = txtSent.getText().toString();
+			Intent ast = new Intent("android.intent.action.SEND");
+			ast.setType("text/plain");
+			ast.putExtra("android.intent.extra.TEXT", txtToBesend);
+			startActivity(ast);
+			
+		}
+		
+	};
+	
+	private OnClickListener gobackLister = new OnClickListener(){
+
+		@Override
+		public void onClick(View v) {
+			setContentView(R.layout.activity_main);
+		}
+		
+	};
+	
 	
 	
 }
