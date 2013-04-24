@@ -1,18 +1,15 @@
 package com.example.dk.ammj.intent.sample;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Contacts;
 import android.provider.MediaStore;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.view.Menu;
 import android.view.View;
@@ -23,6 +20,7 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private static final int SELECT_PICTURE = 0;
+	private static final int SELECTED_CONTACT = 0;
 	private String selectedImagePath;
 	/*
 	 * Set event listeners.
@@ -91,6 +89,20 @@ public class MainActivity extends Activity {
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
             }
+            
+            if(requestCode == SELECTED_CONTACT){
+                String email = ""; 
+            	Uri result = data.getData();
+            	String id = result.getLastPathSegment();  
+                Context context = getApplicationContext();
+                CharSequence text = "Contact info here" + email + " " + id;
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                
+            }
+            
+            
         }
     }
 
@@ -200,14 +212,16 @@ public class MainActivity extends Activity {
 	};
 	
 	private OnClickListener contactPickerLister = new OnClickListener(){
-
 		@Override
 		public void onClick(View arg0) {
-			Context context = getApplicationContext();
-            CharSequence text = "fail";
-            int duration = Toast.LENGTH_SHORT;
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
+//			Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);  
+//		    startActivityForResult(contactPickerIntent, SELECTED_CONTACT);
+			 Context context = getApplicationContext();
+             CharSequence text = "Picking contacts will be here	";
+             int duration = Toast.LENGTH_SHORT;
+             Toast toast = Toast.makeText(context, text, duration);
+             toast.show();
+			
 		}
 		
 	};
