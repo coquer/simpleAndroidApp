@@ -5,9 +5,12 @@ import java.io.InputStream;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.app.Activity;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
@@ -16,10 +19,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
-	private static final int BROWSE_IMAGE_REQUEST_CODE = 0;
-	
+//	private static final int BROWSE_IMAGE_REQUEST_CODE = 0;
+	private static final int SELECT_PICTURE = 0;
+	private String selectedImagePath;
 	/*
 	 * Set event listeners.
 	 * 
@@ -74,25 +79,29 @@ public class MainActivity extends Activity {
 	 * Process image method
 	 * */
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) { 
-		super.onActivityResult(requestCode, resultCode, imageReturnedIntent); 
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_PICTURE) {
+                Uri selectedImageUri = data.getData();
+                selectedImagePath = getPath(selectedImageUri);
+                Context context = getApplicationContext();
+                CharSequence text = "Selected image "+selectedImagePath.toString();
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+        }
+    }
 
-	    switch(requestCode) { 
-	    case BROWSE_IMAGE_REQUEST_CODE:
-	        if(resultCode == RESULT_OK){  
-	            Uri selectedImage = imageReturnedIntent.getData();
-	            InputStream imageStream = null;
-				try {
-					imageStream = getContentResolver().openInputStream(selectedImage);
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				}
-	            Bitmap yourSelectedImage = BitmapFactory.decodeStream(imageStream);
-	            System.out.println(yourSelectedImage.toString());
-	        }
-	    }
-	}
+    public String getPath(Uri uri) {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        @SuppressWarnings("deprecation")
+		Cursor cursor = managedQuery(uri, projection, null, null, null);
+        int column_index = cursor
+                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
 	
 	/*
 	 * to do when a event is trigger..
@@ -125,7 +134,9 @@ public class MainActivity extends Activity {
 			// TODO Auto-generated method stub
 			Intent pickPhoto = new Intent(Intent.ACTION_PICK);
 			pickPhoto.setType("image/*");
-			startActivityForResult(pickPhoto, BROWSE_IMAGE_REQUEST_CODE);
+			//startActivityForResult(pickPhoto, BROWSE_IMAGE_REQUEST_CODE);
+			pickPhoto.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(pickPhoto, "Select Picture"), SELECT_PICTURE);
 		}
 	};
 	
