@@ -22,7 +22,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
-//	private static final int BROWSE_IMAGE_REQUEST_CODE = 0;
 	private static final int SELECT_PICTURE = 0;
 	private String selectedImagePath;
 	/*
@@ -43,6 +42,8 @@ public class MainActivity extends Activity {
 		Button imagePicker = (Button)findViewById(R.id.image_picker);
 		imagePicker.setOnClickListener(imagePickerLister);
 		
+		Button contactPicker = (Button)findViewById(R.id.pick_contact_btn);
+		contactPicker.setOnClickListener(contactPickerLister);
 		
 		Button searchBtn = (Button)findViewById(R.id.search_btn);
 		searchBtn.setOnClickListener(searchQueryLister);
@@ -198,6 +199,17 @@ public class MainActivity extends Activity {
 		
 	};
 	
-	
+	private OnClickListener contactPickerLister = new OnClickListener(){
+
+		@Override
+		public void onClick(View arg0) {
+			Context context = getApplicationContext();
+            CharSequence text = "fail";
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+		}
+		
+	};
 	
 }
