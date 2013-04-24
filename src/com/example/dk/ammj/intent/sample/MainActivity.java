@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private static final int SELECT_PICTURE = 0;
-	private static final int SELECTED_CONTACT = 0;
+	private static final int SELECTED_CONTACT = 666;
 	private String selectedImagePath;
 	/*
 	 * Set event listeners.
